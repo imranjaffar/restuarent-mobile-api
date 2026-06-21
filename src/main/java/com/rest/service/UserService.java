@@ -68,6 +68,28 @@ public class UserService {
         return null;
     }
 
+    public void enableUser(Long id) {
+
+        User user = repo.findById(id)
+                .orElseThrow(() ->
+                        new RuntimeException("User not found"));
+
+        user.setEnabled(true);
+
+        repo.save(user);
+    }
+
+    public void disableUser(Long id) {
+
+        User user = repo.findById(id)
+                .orElseThrow(() ->
+                        new RuntimeException("User not found"));
+
+        user.setEnabled(false);
+
+        repo.save(user);
+    }
+
 
     public String changePassword(String username, String oldPassword, String newPassword) {
 

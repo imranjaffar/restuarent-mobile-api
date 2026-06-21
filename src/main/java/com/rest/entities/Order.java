@@ -36,6 +36,12 @@ public class Order {
     @JsonManagedReference
     private List<OrderItem> items = new ArrayList<>();
 
+
+    @ManyToOne
+    @JoinColumn(name = "table_id")
+    @JsonManagedReference
+    private RestaurantTable table;
+
     // =========================
     // GETTERS & SETTERS
     // =========================
@@ -88,5 +94,13 @@ public class Order {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public RestaurantTable getTable() {
+        return table;
+    }
+
+    public void setTable(RestaurantTable table) {
+        this.table = table;
     }
 }

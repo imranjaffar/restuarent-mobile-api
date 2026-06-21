@@ -5,6 +5,7 @@ import com.rest.dto.ChangePasswordRequest;
 import com.rest.entities.User;
 import com.rest.security.JwtUtil;
 import com.rest.service.UserService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -43,6 +44,19 @@ public class UserController {
         return service.toggleStatus(id, enabled);
     }
 
+    @PostMapping("/enable/{id}")
+    public User enableUser(
+            @PathVariable Long id) {
+
+       return service.toggleStatus(id, true);
+
+    }
+
+    @PostMapping("/disable/{id}")
+    public User disableUser(
+            @PathVariable Long id) {
+        return service.toggleStatus(id, false);
+    }
 
     @PostMapping("/change-password")
     public String changePassword(@RequestBody ChangePasswordRequest req,

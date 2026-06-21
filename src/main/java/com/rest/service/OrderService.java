@@ -3,7 +3,9 @@ package com.rest.service;
 import com.rest.dto.PlaceOrderRequest;
 import com.rest.entities.Order;
 import com.rest.entities.OrderItem;
+import com.rest.entities.RestaurantTable;
 import com.rest.repository.OrderRepository;
+import com.rest.repository.RestaurantTableRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -14,15 +16,32 @@ import java.util.List;
 public class OrderService {
 
     private final OrderRepository orderRepo;
+    private final RestaurantTableRepository tableRepository;
 
-    public OrderService(OrderRepository orderRepo) {
+
+    public OrderService(OrderRepository orderRepo, RestaurantTableRepository tableRepository) {
         this.orderRepo = orderRepo;
+        this.tableRepository = tableRepository;
     }
 
     // 🔥 PLACE ORDER
     public Order placeOrder(PlaceOrderRequest req) {
 
         Order order = new Order();
+        if (req.tableId != null) {
+
+            RestaurantTable table =
+                    tableRepository.findById(req.tableId)
+                            .orElseThrow();
+
+            table.setStatus("OCCUPIED");
+
+            order.setTable(table);
+
+            tableRepository.save(table);
+        }
+
+
         order.setType(req.type);
         order.setStatus("PENDING");
 
@@ -65,6 +84,13 @@ public class OrderService {
 
         if (order != null) {
             order.setStatus(status);
+            if (status.equalsIgnoreCase("PAID") && order.getTable() != null) {
+                RestaurantTable table = order.getTable();
+                table.setStatus("AVAILABLE");
+                order.setTable(table);
+                tableRepository.save(table);
+            }
+
             return orderRepo.save(order);
         }
 

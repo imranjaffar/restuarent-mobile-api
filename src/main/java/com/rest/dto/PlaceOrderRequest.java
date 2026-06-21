@@ -6,6 +6,8 @@ public class PlaceOrderRequest {
 
     public String type;
 
+    public Long tableId;
+
     public List<Item> items;
 
     public static class Item {
@@ -14,4 +16,5 @@ public class PlaceOrderRequest {
         public int qty;
         public double price;
     }
+
 }
