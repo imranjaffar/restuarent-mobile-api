@@ -26,6 +26,9 @@ public class UserService {
 
         user.setPassword(encoder.encode(user.getPassword()));
 
+        if (repo.findByUsername(user.getUsername()).isPresent()) {
+            throw new RuntimeException("User with this name already exists");
+        }
         return repo.save(user);
     }
 

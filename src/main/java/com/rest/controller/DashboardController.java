@@ -3,6 +3,8 @@ package com.rest.controller;
 import com.rest.repository.OrderRepository;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,21 +27,33 @@ public class DashboardController {
         Map<String, Object> res =
                 new HashMap<>();
 
+        LocalDate today = LocalDate.now();
+
+        LocalDateTime start = today.atStartOfDay();
+        LocalDateTime end = today.plusDays(1).atStartOfDay().minusNanos(1);
+
         long totalOrders =
-                orderRepo.count();
+                orderRepo.countByOrderTimeBetween(start, end);
 
         Double totalRevenue =
-                orderRepo.getTotalRevenue();
+                orderRepo.getRevenueBetween(start, end);
 
         long dineInCount =
-                orderRepo.countByType(
-                        "DINE_IN"
-                );
+                orderRepo.countByTypeAndOrderTimeBetween("DINE_IN", start, end);
 
         long takeawayCount =
-                orderRepo.countByType(
-                        "TAKEAWAY"
-                );
+                orderRepo.countByTypeAndOrderTimeBetween("TAKEAWAY", start, end);
+
+
+//        long dineInCount =
+//                orderRepo.countByType(
+//                        "DINE_IN"
+//                );
+//
+//        long takeawayCount =
+//                orderRepo.countByType(
+//                        "TAKEAWAY"
+//                );
 
         res.put(
                 "totalOrders",

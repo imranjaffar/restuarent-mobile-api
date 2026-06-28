@@ -4,6 +4,8 @@ import com.rest.dto.ReportResponse;
 import com.rest.service.ReportService;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+
 @RestController
 @RequestMapping("/reports")
 @CrossOrigin("*")
@@ -18,5 +20,21 @@ public class ReportController {
     @GetMapping
     public ReportResponse getReport() {
         return service.getReport();
+    }
+
+
+    @GetMapping("/range")
+    public ReportResponse getReportByRange(
+
+            @RequestParam LocalDate startDate,
+
+            @RequestParam LocalDate endDate
+
+    ) {
+
+        return service.getReportByDateRange(
+                startDate,
+                endDate
+        );
     }
 }

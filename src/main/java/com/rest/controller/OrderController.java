@@ -7,6 +7,7 @@ import com.rest.repository.OrderRepository;
 import com.rest.service.OrderService;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,8 +33,14 @@ public class OrderController {
             @RequestParam(defaultValue = "10") int size
     ) {
 
-        Pageable pageable =
-                PageRequest.of(page, size);
+//        Pageable pageable =
+//                PageRequest.of(page, size);
+
+        Pageable pageable = PageRequest.of(
+                page,
+                size,
+                Sort.by(Sort.Direction.DESC, "orderTime")
+        );
 
         return orderRepo
                 .findAll(pageable)
